@@ -21,6 +21,7 @@ public class WebAppInitializer implements WebApplicationInitializer {
         // create the Spring application context
         AnnotationConfigWebApplicationContext context =
                 new AnnotationConfigWebApplicationContext();
+
         context.register(WebConfig.class);
 
         // create the dispatcher servlet
