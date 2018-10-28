@@ -1,4 +1,9 @@
 package academy.learnprogramming.service;
 
-public class DemoService {
+public interface DemoService {
+
+    String getHelloMessage(String user);
+
+    String getWelcomeMessage();
+
 }
