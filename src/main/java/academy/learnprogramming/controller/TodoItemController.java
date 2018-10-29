@@ -36,9 +36,25 @@ public class TodoItemController {
         return ViewNames.ITEMS_LIST;
     }
 
+    @GetMapping(Mappings.VIEW_ITEM)
+    public String viewItem(@RequestParam int id, Model model) {
+        TodoItem todoItem = todoItemService.getItem(id);
+        model.addAttribute(AttributeNames.TODO_ITEM, todoItem);
+
+        log.info("Get item " + todoItem);
+
+        return ViewNames.VIEW_ITEM;
+    }
+
     @GetMapping(Mappings.ADD_ITEM)
-    public String addEditItem(Model model) {
-        TodoItem todoItem = new TodoItem("", "", LocalDate.now());
+    public String addEditItem(@RequestParam(required = false, defaultValue = "-1") int id, Model model) {
+        log.info("Editing item id = " + id);
+        TodoItem todoItem = todoItemService.getItem(id);
+
+        if (todoItem == null) {
+            todoItem = new TodoItem("", "", LocalDate.now());
+        }
+
         model.addAttribute(AttributeNames.TODO_ITEM, todoItem);
         return ViewNames.ADD_ITEM;
     }
@@ -46,13 +62,19 @@ public class TodoItemController {
     @PostMapping(Mappings.ADD_ITEM)
     public String processItem(@ModelAttribute(AttributeNames.TODO_ITEM) TodoItem todoItem) {
         log.info("todoItem from form = {}", todoItem);
-        todoItemService.addItem(todoItem);
+
+        if (todoItem.getId() == 0) {
+            todoItemService.addItem(todoItem);
+        } else {
+            todoItemService.updateItem(todoItem);
+        }
+
         return "redirect:/" + Mappings.ITEMS;
     }
 
     @GetMapping(Mappings.DELETE_ITEM)
     public String deleteItem(@RequestParam int id) {
-        log.info("deleted item with id = " + id);
+        log.info("Deleted item with id = " + id);
         todoItemService.removeItem(id);
         return "redirect:/" + Mappings.ITEMS;
     }

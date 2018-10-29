@@ -20,6 +20,7 @@
     <a href="${addUrl}">New Item</a>
   </h2>
 
+
   <table border="1" cellpadding="5">
     <caption>
       <h2>TodoItems</h2>
@@ -28,20 +29,35 @@
     <tr>
       <th>Title</th>
       <th>Deadline</th>
+      <th>Edit</th>
       <th>Delete</th>
     </tr>
 
     <c:forEach var="item" items="${todoData.items}">
 
-      <c:url var="deleteItem" value="${Mappings.DELETE_ITEM}">
+      <c:url var="editUrl" value="${Mappings.ADD_ITEM}">
+        <c:param name="id" value="${item.id}"/>
+      </c:url>
+
+      <c:url var="deleteUrl" value="${Mappings.DELETE_ITEM}">
         <c:param name="id" value="${item.id}"/>
       </c:url>
 
       <tr>
-        <td><c:out value="${item.title}"/></td>
+        <td>
+          <c:url var="viewUrl" value="${Mappings.VIEW_ITEM}">
+            <c:param name="id" value="${item.id}"/>
+          </c:url>
+          <a href="${viewUrl}">
+            <c:out value="${item.title}"/>
+          </a>
+        </td>
         <td><c:out value="${item.deadline}"/></td>
         <td>
-          <a href="${deleteItem}">Delete</a>
+          <a href="${editUrl}">Edit</a>
+        </td>
+        <td>
+          <a href="${deleteUrl}">Delete</a>
         </td>
       </tr>
 
